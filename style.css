@@ -1,0 +1,55 @@
+body {
+  margin: 0;
+}
+.title {
+  text-align: center;
+  font-size: 24px;
+  font-family: 'Roboto';
+  margin: 30px 0 20px 0;
+}
+.container {
+  margin: 0 auto;
+}
+
+.tooltip {
+  position: relative;
+  font-family: 'Roboto';
+  background: #393E46;
+  color: #fff;
+  display: inline-block;
+  opacity: 0;
+}
+
+.tooltip__result {
+  background: #222831;
+  color: #FFD740;
+  float: left;
+  height: 40px;
+  width: 50px;
+  text-align: center;
+  font-size: 26px;
+  padding-top: 10px;
+}
+
+.tooltip__detail {
+  display: inline-block;
+  padding: 5px 10px;
+}
+
+.axis text {
+  font-family: 'Roboto Mono';
+  font-size: 12px;
+}
+
+.axis path {
+  opacity: 0;
+}
+
+.axis line {
+  stroke: #333;
+}
+
+.axisLabel {
+  font-family: 'Roboto Mono';
+  font-size: 12px;
+}
