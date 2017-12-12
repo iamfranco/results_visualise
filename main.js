@@ -26,7 +26,7 @@ var lecturers = [];
 
 // fetch data
 var ourRequest = new XMLHttpRequest();
-ourRequest.open('GET','https://raw.githubusercontent.com/iamfranco/D3-examples/master/data/grades.js')
+ourRequest.open('GET','https://raw.githubusercontent.com/iamfranco/undergrad_results_visualise/master/results.js')
 ourRequest.onload = function() {
   var undergrad = JSON.parse(ourRequest.responseText).undergrad;
 
