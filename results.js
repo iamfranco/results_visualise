@@ -270,34 +270,5 @@
       "sem": 2,
       "lecturer": "Peter Duck"
     }
-  ],
-  "postgrad":[
-    {
-      "name": "Applied Dynamical Systems",
-      "code": "MATH64041",
-      "result": 91,
-      "credits": 15,
-      "year": 1,
-      "sem": 1,
-      "lecturer": "Yanghong Huang"
-    },
-    {
-      "name": "Scientific Computing",
-      "code": "MATH69111",
-      "result": 82,
-      "credits": 15,
-      "year": 1,
-      "sem": 1,
-      "lecturer": "Chris Johnson"
-    },
-    {
-      "name": "PDEs: Theory & Practice",
-      "code": "MATH64062",
-      "result": 85,
-      "credits": 15,
-      "year": 1,
-      "sem": 2,
-      "lecturer": "Alice Thompson"
-    },
   ]
 }
