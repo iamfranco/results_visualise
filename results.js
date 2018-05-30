@@ -313,5 +313,5 @@
     "year": 5,
     "sem": 1,
     "lecturer": "Jitesh Gajjar"
-  },
+  }
 ]
