@@ -1,6 +1,23 @@
 body {
   margin: 0;
 }
+
+.github_link {
+  display: inline-block;
+  padding: 10px 20px;
+  font-family: 'Roboto';
+  color: #fff;
+  background: rgba(0,0,0,0.6);
+  position: absolute;
+  top: 0;
+  right: 0;
+  transition: all 0.2s ease;
+}
+
+.github_link:hover {
+  background: rgba(0,0,0,0.8);
+}
+
 .title {
   text-align: center;
   font-size: 24px;
