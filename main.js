@@ -28,7 +28,7 @@ var lecturers = [];
 var ourRequest = new XMLHttpRequest();
 ourRequest.open('GET','https://raw.githubusercontent.com/iamfranco/undergrad_results_visualise/master/results.js')
 ourRequest.onload = function() {
-  var undergrad = JSON.parse(ourRequest.responseText).undergrad;
+  var course_item = JSON.parse(ourRequest.responseText);
 
   function xIndex(d) {return 2*(d.year - 1) + d.sem -1;}
   var xTicksLength = 6;
@@ -37,7 +37,9 @@ ourRequest.onload = function() {
     var label = [
       'Year 1 Sem 1', 'Year 1 Sem 2',
       'Year 2 Sem 1', 'Year 2 Sem 2',
-      'Year 3 Sem 1', 'Year 3 Sem 2'
+      'Year 3 Sem 1', 'Year 3 Sem 2',
+      'Year 4 Sem 1', 'Year 4 Sem 2',
+      'Year 5 Sem 1', 'Year 5 Sem 2',
     ];
     return label[n];
   }
@@ -54,7 +56,7 @@ ourRequest.onload = function() {
 
   // draw data points
   var dataPoint = chart.selectAll('.dataPoint')
-      .data(undergrad)
+      .data(course_item)
     .enter().append('circle')
       .attr('class','dataPoint')
       .attr('cy', function(d){
@@ -67,7 +69,7 @@ ourRequest.onload = function() {
         var newX = x(xIndex(d)) + margin.left + margin.graph + margin.start;
         for (var j=0; j<positions.length; j++) {
           if (positions[j].x == newX && positions[i].y==positions[j].y) {
-            newX += radius(undergrad[i]); // shift right for overlapping circles
+            newX += radius(course_item[i]); // shift right for overlapping circles
           }
         }
         positions[i].x = newX;
