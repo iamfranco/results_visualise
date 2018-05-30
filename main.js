@@ -319,12 +319,12 @@ var course_item = [
 
 // chart
 var width = 1000;
-var height = 600;
+var height = 500;
 var margin = {
   left: 50,
-  right: 100,
+  right: 80,
   top: 10,
-  bottom: 230,
+  bottom: 30,
   graph: 15,
   start: 30
 }
