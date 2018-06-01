@@ -1,3 +1,5 @@
+// TODO: add linear least square line of best fit
+
 // data
 var course_item = [
   {
@@ -318,17 +320,20 @@ var course_item = [
 ]
 
 // chart
+var maxWidth = Math.min(innerWidth,1300);
+var maxHeight = Math.min(innerHeight,800);
+
 var margin = {top: 45, right: 120, bottom: 90, left: 80, graph: 15, start: 30},
-  width = innerWidth - margin.left - margin.right,
-  height = innerHeight - margin.top - margin.bottom;
+  width = maxWidth - margin.left - margin.right,
+  height = maxHeight - margin.top - margin.bottom;
 
 var container = d3.select('.container')
-    .style('width', innerWidth + 'px')
-    .style('height', height + 'px')
+    .style('width', maxWidth + 'px')
+    .style('height', maxHeight + 'px')
 
 var chart = d3.select('.chart')
-    .attr('width', innerWidth)
-    .attr('height', height)
+    .attr('width', maxWidth)
+    .attr('height', maxHeight)
 
 var tooltip = d3.select('.tooltip');
 var tooltip__result = d3.select('.tooltip__result');
@@ -409,12 +414,12 @@ var dataPoint = chart.selectAll('.dataPoint')
 
       tooltip
         .style('z-index', 0)
-        .style('top', (dot_cy - height + 20) + 'px')
+        .style('top', (dot_cy - maxHeight + 20) + 'px')
         .transition()
         .duration(200)
         .style('opacity',1)
       // shift left according to dot position
-      if (dot_cx < 700) {
+      if (dot_cx < maxWidth-300) {
         tooltip
           .style('left', (dot_cx - 25) + 'px')
           .style('transform','translateX(0%)')

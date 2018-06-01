@@ -26,6 +26,10 @@ body {
   background: rgba(0,0,0,0.8);
 }
 
+.container {
+  margin: 0 auto;
+}
+
 .title {
   text-align: center;
   font-size: 24px;
