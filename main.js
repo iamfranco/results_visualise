@@ -318,24 +318,17 @@ var course_item = [
 ]
 
 // chart
-var width = 1000;
-var height = 500;
-var margin = {
-  left: 50,
-  right: 80,
-  top: 10,
-  bottom: 30,
-  graph: 15,
-  start: 30
-}
+var margin = {top: 45, right: 120, bottom: 90, left: 80, graph: 15, start: 30},
+  width = innerWidth - margin.left - margin.right,
+  height = innerHeight - margin.top - margin.bottom;
 
 var container = d3.select('.container')
-    .style('width',width + 'px')
-    .style('height',height + 'px')
+    .style('width', innerWidth + 'px')
+    .style('height', height + 'px')
 
 var chart = d3.select('.chart')
-    .attr('width',width)
-    .attr('height',height)
+    .attr('width', innerWidth)
+    .attr('height', height)
 
 var tooltip = d3.select('.tooltip');
 var tooltip__result = d3.select('.tooltip__result');
@@ -360,7 +353,11 @@ function xTicks(n) {
 
 var x = d3.scaleLinear()
     .domain([0, xTicksLength-1])
-    .range([0, width-margin.left-margin.right-margin.graph])
+    .range([0, width-margin.graph])
+
+var invx = d3.scaleLinear()
+    .range([0, xTicksLength-1])
+    .domain([0, width-margin.graph])
 
 var y = d3.scaleLinear()
     .domain([60, 100])
@@ -469,7 +466,158 @@ chart.append('g')
 
 // axes label
 chart.append('text')
-    .attr('class', 'axisLabel')
+    .attr('class', 'axislabel')
     .attr('x', margin.left + margin.graph)
     .attr('y', margin.top + 5)
     .text('Result (%)')
+
+// Add brackets
+var averageLineOn = false;
+var bracket_pos = [[0],[xTicksLength-1]];
+var bracket; draw_brackets();
+function draw_brackets() {
+  bracket = chart.selectAll('.bracket')
+    .remove()
+    .exit()
+      .data(bracket_pos)
+    .enter().append('circle')
+      .attr('class','bracket')
+      .attr('cx', (d)=>x(d[0]) + margin.left + margin.graph + margin.start)
+      .attr('cy', height-30)
+      .attr('r',5)
+      .attr('fill','black')
+      .attr('fill-opacity',averageLineOn? 0.8:0)
+      .call(d3.drag()
+          .on("drag", function(d) {
+            var mouse_x = graphPosition(event.x,true);
+            var dot_x = Math.min(Math.max(mouse_x,0),xTicksLength-1); // limit dot between [0, xTicksLength-1]
+            d3.select(this).attr("cx", x( d[0] = dot_x) + margin.left + margin.graph + margin.start);
+            updateAverage();
+            update_handler_pos();
+            draw_handler();
+          }));
+}
+
+// Add center handler for both brackets
+var bracket_handler_pos = [[]]; update_handler_pos();
+var bracket_handler; draw_handler();
+function update_handler_pos() { bracket_handler_pos[0][0] = (bracket_pos[0][0] + bracket_pos[1][0]) / 2}
+function update_lrbrackets(new_average) {
+
+  old_average = (bracket_pos[0][0] + bracket_pos[1][0]) / 2;
+  change = new_average - old_average;
+  if (bracket_pos[0][0] + change < 0 || bracket_pos[0][0] + change > xTicksLength-1 ||
+      bracket_pos[1][0] + change < 0 || bracket_pos[1][0] + change > xTicksLength-1) {
+    return false;
+  } else {
+    bracket_pos[0][0] += change;
+    bracket_pos[1][0] += change;
+    return true;
+  }
+}
+function draw_handler() {
+  bracket_handler = chart.selectAll('.bracket_handler')
+    .remove()
+    .exit()
+      .data(bracket_handler_pos)
+    .enter().append('circle')
+      .attr('class','bracket_handler')
+      .attr('cx', (d)=>x(d[0]) + margin.left + margin.graph + margin.start)
+      .attr('cy', height-10)
+      .attr('r',8)
+      .attr('fill','black')
+      .attr('fill-opacity',averageLineOn? 0.8:0.1)
+      .attr('cursor','pointer')
+      .on('click', function() { // on off switch for average line
+        if (averageLineOn) {
+          // turn off
+          averageLineOn = false;
+          bracket_handler.transition().duration(200).attr('fill-opacity',0.1);
+          bracket.transition().duration(200).attr('fill-opacity',0);
+          averageLine.transition().duration(200).attr('opacity',0);
+          averageLineLabel.transition().duration(200).attr('opacity',0);
+        } else {
+          // turn on
+          averageLineOn = true;
+          bracket_handler.transition().duration(200).attr('fill-opacity',0.8);
+          bracket.transition().duration(200).attr('fill-opacity',0.8);
+          averageLine.transition().duration(200).attr('opacity',0.8);
+          averageLineLabel.transition().duration(200).attr('opacity',0.8);
+        }
+      })
+      .call(d3.drag()
+          .on("drag", function(d) {
+            var old_pos = bracket_handler_pos;
+            var lbracket = Math.min(bracket_pos[0][0], bracket_pos[1][0]);
+            var rbracket = Math.max(bracket_pos[0][0], bracket_pos[1][0]);
+            var mouse_x = graphPosition(event.x,!((lbracket-rbracket)%2));
+            var dot_x = Math.min(Math.max(mouse_x,0),xTicksLength-1); // limit dot between [0, xTicksLength-1]
+            allow_move = update_lrbrackets(dot_x);
+            if (allow_move) {
+              d3.select(this).attr("cx", x( d[0] = dot_x) + margin.left + margin.graph + margin.start);
+            }
+            draw_brackets();
+            updateAverage();
+          }));
+}
+
+// // add average line
+updateAverage();
+var averageLine;
+var averageLineLabel;
+
+function updateAverage() {
+  result_sum = 0;
+  credit_sum = 0;
+  start_idx = bracket_pos[0][0];
+  end_idx = bracket_pos[1][0];
+  if (start_idx > end_idx) {
+    temp = start_idx;
+    start_idx = end_idx;
+    end_idx = temp;
+  }
+  for (var i=0; i<course_item.length; i++) {
+    if (xIndex(course_item[i]) < start_idx) continue;
+    if (xIndex(course_item[i]) > end_idx) break;
+    result_sum += course_item[i].result * course_item[i].credits;
+    credit_sum += course_item[i].credits;
+  }
+  credit_sum = credit_sum ? credit_sum : 1; // prevent dividing by zero when calculating average
+  average = result_sum / credit_sum;
+  averageLine = chart.selectAll('.averageLine')
+    .remove()
+		.exit()
+      .data([average])
+    .enter().append('line')
+      .attr('class','averageLine')
+      .attr('x1', x(start_idx-0.2) + margin.left + margin.graph + margin.start)
+      .attr('x2', x(end_idx+0.2) + margin.left + margin.graph + margin.start)
+      .attr('y1', (d)=>y(d)+margin.top)
+      .attr('y2', (d)=>y(d)+margin.top)
+      .attr("stroke-width", 1)
+      .attr("stroke", "black")
+      .attr("opacity", averageLineOn? 0.8:0);
+
+  // average line label
+  averageLineLabel = chart.selectAll('.averageLineLabel')
+    .remove()
+    .exit()
+      .data([average])
+    .enter().append('text')
+      .attr('class', 'averageLineLabel')
+      .attr('text-anchor','middle')
+      .attr('opacity', averageLineOn? 0.8:0)
+      .attr('x', x(end_idx) + margin.left + margin.graph + margin.start)
+      .attr('y', (d)=>y(d) + margin.top-5)
+      .text(Math.round(average*10)/10)
+}
+
+// window x to graph x
+function graphPosition(x, round) {
+  new_x = invx(x-margin.left-margin.graph-margin.start);
+  if (round) {
+    return Math.round(new_x);
+  } else {
+    return Math.round(new_x*2)/2;
+  }
+}
