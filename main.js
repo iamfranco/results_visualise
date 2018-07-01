@@ -316,6 +316,33 @@ var course_item = [
     "year": 5,
     "sem": 1,
     "lecturer": "Jitesh Gajjar"
+  },
+  {
+    "name": "Numerical Optimization",
+    "code": "MATH66132",
+    "result": 99,
+    "credits": 15,
+    "year": 5,
+    "sem": 2,
+    "lecturer": "Oliver Dorn"
+  },
+  {
+    "name": "Transport Phenomena",
+    "code": "MATH65122",
+    "result": 87,
+    "credits": 15,
+    "year": 5,
+    "sem": 2,
+    "lecturer": "Julien Landel"
+  },
+  {
+    "name": "Transferable Skills",
+    "code": "MATH65740",
+    "result": 82,
+    "credits": 15,
+    "year": 5,
+    "sem": 2,
+    "lecturer": "Gareth Jones"
   }
 ]
 
