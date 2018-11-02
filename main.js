@@ -343,6 +343,15 @@ var course_item = [
     "year": 5,
     "sem": 2,
     "lecturer": "Gareth Jones"
+  },
+  {
+    "name": "MSc Dissertation",
+    "code": "MATH65740",
+    "result": 85,
+    "credits": 60,
+    "year": 5,
+    "sem": 2,
+    "lecturer": "Stefan Güttel"
   }
 ]
 
