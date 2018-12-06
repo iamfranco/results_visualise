@@ -655,7 +655,7 @@ function updateAverage() {
 
 // window x to graph x
 function graphPosition(x, round) {
-  new_x = invx(event.x - (innerWidth-maxWidth)/2 - margin.left - margin.start - margin.graph);
+  new_x = invx(x - (innerWidth-maxWidth)/2 - margin.left - margin.start - margin.graph);
   if (round) {
     return Math.round(new_x);
   } else {
