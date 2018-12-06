@@ -530,7 +530,7 @@ function draw_brackets() {
       .attr('fill-opacity',averageLineOn? 0.8:0)
       .call(d3.drag()
           .on("drag", function(d) {
-            var mouse_x = graphPosition(event.x,true);
+            var mouse_x = graphPosition(d3.event.x,true);
             var dot_x = Math.min(Math.max(mouse_x,0),xTicksLength-1); // limit dot between [0, xTicksLength-1]
             d3.select(this).attr("cx", x( d[0] = dot_x) + margin.left + margin.graph + margin.start);
             updateAverage();
@@ -591,7 +591,7 @@ function draw_handler() {
             var old_pos = bracket_handler_pos;
             var lbracket = Math.min(bracket_pos[0][0], bracket_pos[1][0]);
             var rbracket = Math.max(bracket_pos[0][0], bracket_pos[1][0]);
-            var mouse_x = graphPosition(event.x,!((lbracket-rbracket)%2));
+            var mouse_x = graphPosition(d3.event.x,!((lbracket-rbracket)%2));
             var dot_x = Math.min(Math.max(mouse_x,0),xTicksLength-1); // limit dot between [0, xTicksLength-1]
             allow_move = update_lrbrackets(dot_x);
             if (allow_move) {
