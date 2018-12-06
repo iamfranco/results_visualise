@@ -84,4 +84,5 @@ body {
   font-family: 'Roboto Mono';
   font-size: 14px;
   text-align: center;
+  pointer-events: none;
 }
