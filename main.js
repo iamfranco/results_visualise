@@ -528,6 +528,9 @@ function draw_brackets() {
       .attr('r',5)
       .attr('fill','black')
       .attr('fill-opacity',averageLineOn? 0.8:0)
+      .attr('stroke','black')
+      .attr('stroke-width', 20)
+      .attr('stroke-opacity', 0)
       .call(d3.drag()
           .on("drag", function(d) {
             var mouse_x = graphPosition(d3.event.x,true);
@@ -568,6 +571,9 @@ function draw_handler() {
       .attr('r',8)
       .attr('fill','black')
       .attr('fill-opacity',averageLineOn? 0.8:0.1)
+      .attr('stroke','black')
+      .attr('stroke-width', 20)
+      .attr('stroke-opacity', 0)
       .attr('cursor','pointer')
       .on('click', function() { // on off switch for average line
         if (averageLineOn) {
